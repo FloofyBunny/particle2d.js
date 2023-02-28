@@ -8,8 +8,9 @@ class Node {
 
 class LinkedList {
     constructor() {
-        this.head = null;
+        this.first = null;
         this.size = 0;
+        this.last = null;
     }
 
     isEmpty() {
@@ -21,7 +22,7 @@ class LinkedList {
     }
 
     getLast() {
-        let current = this.first
+        let current = this.first;
         while(current.next != null) {
             current = current.next;
         }
@@ -32,7 +33,8 @@ class LinkedList {
         const node = new Node(value);
         if(!this.isEmpty()) {
             node.next = this.first;
-            this.last = this.first
+        } else {
+            this.last = node;
         }
         this.first = node;
         this.size++
@@ -45,48 +47,59 @@ class LinkedList {
         } else {
             this.last.next = node;
         }
-        this.last = node
+        this.last = node;
         this.size++
     }
-
+    //TODO: fix
     remove(index) {
+        let listSize = this.getSize();
         //index out of bounds
-        if(0 >= index >= this.getSize()){ 
-            alert("List remove index out of bounds");
+        if( 0 > index || index >= listSize){ 
+            alert("List remove() index out of bounds, index at: " + index);
+            return null;
         }
         //deletion handler
+        this.size--;
         let del;
-        if(index == this.getSize()-1){
-            del = function (node){
-                node.next = null
+        if(index === 0){
+            del = function (obj){
+                let r = obj.first;
+                obj.first = obj.first.next;
+                return r;
             }
-        } else if(index == 0) {
-            del = function (){
-                this.first = this.first.next
+        } else if(index === listSize-1) {
+            del = function (node){
+                let r = node.next;
+                node.next = null;
+                return r;
             }
         } else {
-            del = function (node){
-                node.next = node.next.next
+            del = function (obj = null, node){
+                let r = node.next;
+                node.next = node.next.next;
+                return r;
             }
         }
         
-        search = 0
-        point = this.first
-        if(!index == 0){
-            while(index > search < this.getSize()){
-                //check if next node has a next node
-                if(search+1 == index) {
-                    del(point);
-                }
-                search++;
-                point = point.next;
-            }
-        } else {
-            del();
+        let prev = this.first;
+
+        if(index === 0){
+            return del(this);
         }
+        for(let i = 1; i < index; i++){
+            prev = prev.next;
+        }
+        let deleted = del( prev);
+        this.last = this.getLast();
+        return deleted
     }
 }
-
+//TODO fix li.remove(1)
+const li = new LinkedList ();
+li.prepend(0);
+li.prepend(1);
+li.remove(1);
+debugger;
 
 
 const canvas = document.getElementById("myCanvas");
