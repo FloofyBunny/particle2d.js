@@ -1,8 +1,27 @@
+"use strict"
+
+class Vector extends Array {
+    // example methods
+    add(other) {
+      return this.map((e, i) => e + other[i]);
+    }
+
+    abs(){
+        let sum = 0;
+        this.map(e => sum += e**2);
+        return Math.sqrt(sum);
+    }
+}
+
 //Linked list
 class Node {
     constructor(value) {
         this.value = value;
         this.next = null;
+    }
+
+    getValue(){
+        return this.value;
     }
 }
 
@@ -112,51 +131,77 @@ class Particle {
         this.x = x;
         this.y = y;
         this.r = r;
-        this.xvel = xvel;
-        this.yvel = yvel;
+        this.vel = new Vector(xvel, yvel);
 
+    }
+
+    getY() {
+        return this.y;
     }
 }
 
 
-
-ctx.beginPath();
-ctx.fillStyle = "white";
-ctx.arc(100, 100, 100, 0 , Math.PI * 2, false);
-ctx.fill();
-const p = new Particle(10, 10, 10, 10, 10);
 const fps = 60;
 let lastTimestamp = 0;
+const particles = new LinkedList();
 
+function generateParticles(){
+    for(let i = 0; i < 9; i++) {
+        particles.append(new Particle(i*10, 100, 10, 0, 0));
+    }
+
+}
+
+function draw() {
+    let x = particles.first;
+    ctx.fillStyle = "white";
+    while(x !== null){
+        ctx.moveTo(x.getValue().x, 100);
+        ctx.arc(x.getValue().x*10, 300, 20, 0 , Math.PI * 2, false);   
+        x = x.next;
+    }
+    ctx.fill();
+
+}
+
+function physics() {
+    let current = particles.first;
+    while(current){
+        let other = current.next;
+        while(other){
+            9.81
+            other = other.next
+        }
+        current = current.next;
+    }
+}
 
 function getDeltaTime(currentTimestamp){
-    let frametime = lastTimestamp - currentTimestamp;
+    let frametime = currentTimestamp-lastTimestamp;
     console.log(frametime);
     return frametime/1000;
 }
 
+// !!! multiply movement by deltatime 
 function animate(timestamp) {
-    let deltaTime = getDeltaTime(timestamp)
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    requestAnimationFrame(fpslimiter);
+    ctx.beginPath();
+    let deltaTime = getDeltaTime(timestamp);
     lastTimestamp = timestamp;
     
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r ,0 , 2*Math.PI, false);
-    ctx.fill();
-    p.x += p.xvel * (deltaTime/1000);
-    p.y += p.yvel * (deltaTime/1000);
-    console.log(p.y)
+    draw();
     
+    ctx.closePath();
 
-    requestAnimationFrame(fpslimiter);
 }
 
 function fpslimiter(timestamp) {
-    setTimeout(animate, 1000/60, timestamp);
-}
+    setTimeout(animate, 1000/fps, timestamp);
 
+}
+generateParticles();
 requestAnimationFrame(fpslimiter);
-//requestAnimationFrame(animate);
 
 
 
