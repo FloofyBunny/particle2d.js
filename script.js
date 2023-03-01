@@ -192,16 +192,27 @@ function draw() {
 function physics() {
     let current = particles.first;
     while(current){
+        const p1 = current.getValue();
         let other = current.next;
         while(other){
-            between = current.pos.subtract(other.pos);
+            const p2 = other.getValue();
+            between = p1.pos.subtract(p2.pos);
             distance = between.abs();
             force = 9.81 * (1 / (distance**2));
             normal = distance.normal();
-            current.vel.add(normal * force)
+            p1.vel.add(normal.multiply(force));
+            p2.vel.add(normal.multiply(-force));
             other = other.next;
         }
         current = current.next;
+    }
+}
+
+function moveParticles() {
+    let current = particles.first;
+    while(current) {
+        p = current.getValue();
+        
     }
 }
 
