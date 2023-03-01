@@ -6,10 +6,14 @@ class Vector extends Array {
       return this.map((e, i) => e + other[i]);
     }
 
-    abs(){
+    abs() {
         let sum = 0;
         this.map(e => sum += e**2);
         return Math.sqrt(sum);
+    }
+
+    subtract(other) {
+        return this.map((e, i) => e - other[i]);
     }
 }
 
@@ -169,7 +173,8 @@ function physics() {
     while(current){
         let other = current.next;
         while(other){
-            9.81
+            neg = other.map(e => -e);
+            distance = current.vel.add(neg);
             other = other.next
         }
         current = current.next;
