@@ -16,8 +16,12 @@ class Vector extends Array {
         return this.map((e, i) => e - other[i]);
     }
 
-    normal(){
-        return this.map(e => e/v.abs());
+    normal() {
+        return this.map(e => e / v.abs());
+    }
+
+    multiply() {
+        return this.map(e => e * v.abs());
     }
 }
 
@@ -192,8 +196,9 @@ function physics() {
         while(other){
             between = current.pos.subtract(other.pos);
             distance = between.abs();
-            force = 9.81(1/(distance**2));
-            
+            force = 9.81 * (1 / (distance**2));
+            normal = distance.normal();
+            current.vel.add(normal * force)
             other = other.next;
         }
         current = current.next;
