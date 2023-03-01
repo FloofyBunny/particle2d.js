@@ -50,7 +50,6 @@ class LinkedList {
         this.last = node;
         this.size++
     }
-    //TODO: fix
     remove(index) {
         let listSize = this.getSize();
         //index out of bounds
@@ -94,25 +93,25 @@ class LinkedList {
         return deleted
     }
 }
-//TODO fix li.remove(1)
+
 const li = new LinkedList ();
 li.prepend(0);
 li.prepend(1);
 li.remove(1);
-debugger;
 
 
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 canvas.height = canvas.width;
-canvas.width = 1600;
-canvas.height = 900;
+canvas.width = 800;
+canvas.height = 600;
 
-class particle {
+class Particle {
 
     constructor(x = 0, y = 0, r = 10, xvel = 0, yvel = 0){
         this.x = x;
         this.y = y;
+        this.r = r;
         this.xvel = xvel;
         this.yvel = yvel;
 
@@ -125,6 +124,39 @@ ctx.beginPath();
 ctx.fillStyle = "white";
 ctx.arc(100, 100, 100, 0 , Math.PI * 2, false);
 ctx.fill();
+const p = new Particle(10, 10, 10, 10, 10);
+const fps = 60;
+let lastTimestamp = 0;
+
+
+function getDeltaTime(currentTimestamp){
+    let frametime = lastTimestamp - currentTimestamp;
+    console.log(frametime);
+    return frametime/1000;
+}
+
+function animate(timestamp) {
+    let deltaTime = getDeltaTime(timestamp)
+    lastTimestamp = timestamp;
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r ,0 , 2*Math.PI, false);
+    ctx.fill();
+    p.x += p.xvel * (deltaTime/1000);
+    p.y += p.yvel * (deltaTime/1000);
+    console.log(p.y)
+    
+
+    requestAnimationFrame(fpslimiter);
+}
+
+function fpslimiter(timestamp) {
+    setTimeout(animate, 1000/60, timestamp);
+}
+
+requestAnimationFrame(fpslimiter);
+//requestAnimationFrame(animate);
 
 
 
