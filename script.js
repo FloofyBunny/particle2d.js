@@ -132,15 +132,26 @@ canvas.height = 600;
 class Particle {
 
     constructor(x = 0, y = 0, r = 10, xvel = 0, yvel = 0){
-        this.x = x;
-        this.y = y;
+        this.pos = new Vector(x, y);
         this.r = r;
         this.vel = new Vector(xvel, yvel);
 
     }
 
+    getX() {
+        return this.pos[0];
+    }
+
     getY() {
-        return this.y;
+        return this.pos[1];
+    }
+
+    setX(x) {
+        this.pos[0] = x;
+    }
+
+    setY(y) {
+        this.pos[1] = y;ö
     }
 }
 
@@ -173,9 +184,8 @@ function physics() {
     while(current){
         let other = current.next;
         while(other){
-            neg = other.map(e => -e);
-            distance = current.vel.add(neg);
-            other = other.next
+            distance = current.vel.subtract(other);
+            other = other.next;
         }
         current = current.next;
     }
