@@ -15,7 +15,13 @@ class Vector extends Array {
     subtract(other) {
         return this.map((e, i) => e - other[i]);
     }
+
+    normal(){
+        return this.map(e => e/v.abs());
+    }
 }
+
+
 
 //Linked list
 class Node {
@@ -151,7 +157,7 @@ class Particle {
     }
 
     setY(y) {
-        this.pos[1] = y;ö
+        this.pos[1] = y;
     }
 }
 
@@ -171,8 +177,8 @@ function draw() {
     let x = particles.first;
     ctx.fillStyle = "white";
     while(x !== null){
-        ctx.moveTo(x.getValue().x, 100);
-        ctx.arc(x.getValue().x*10, 300, 20, 0 , Math.PI * 2, false);   
+        ctx.moveTo(x.getValue().getX(), 100);
+        ctx.arc(x.getValue().getX()*10, 300, 20, 0 , Math.PI * 2, false);   
         x = x.next;
     }
     ctx.fill();
@@ -184,7 +190,10 @@ function physics() {
     while(current){
         let other = current.next;
         while(other){
-            distance = current.vel.subtract(other);
+            between = current.pos.subtract(other.pos);
+            distance = between.abs();
+            force = 9.81(1/(distance**2));
+            
             other = other.next;
         }
         current = current.next;
