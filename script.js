@@ -17,11 +17,11 @@ class Vector extends Array {
     }
 
     normal() {
-        return this.map(e => e / v.abs());
+        return this.map(e => e / this.abs());
     }
 
-    multiply() {
-        return this.map(e => e * v.abs());
+    multiply(v) {
+        return this.map(e => e * v);
     }
 }
 
@@ -172,21 +172,14 @@ const particles = new LinkedList();
 
 function generateParticles(){
     for(let i = 0; i < 9; i++) {
-        particles.append(new Particle(i*10, 100, 10, 0, 0));
+        particles.append(new Particle(i*100, 100, 10, 0, 0));
     }
 
 }
 
-function draw() {
-    let x = particles.first;
-    ctx.fillStyle = "white";
-    while(x !== null){
-        ctx.moveTo(x.getValue().getX(), 100);
-        ctx.arc(x.getValue().getX()*10, 300, 20, 0 , Math.PI * 2, false);   
-        x = x.next;
-    }
-    ctx.fill();
-
+function draw(p) {
+    ctx.moveTo(p.getX(), p.getY());
+    ctx.arc(p.getX(), p.getY(), p.r, 0 , Math.PI * 2, false);   
 }
 
 function physics() {
@@ -196,23 +189,25 @@ function physics() {
         let other = current.next;
         while(other){
             const p2 = other.getValue();
-            between = p1.pos.subtract(p2.pos);
-            distance = between.abs();
-            force = 9.81 * (1 / (distance**2));
-            normal = distance.normal();
-            p1.vel.add(normal.multiply(force));
-            p2.vel.add(normal.multiply(-force));
+            let between = p1.pos.subtract(p2.pos);
+            let distance = between.abs();
+            let force = 9.81 * (1 / (distance**2));
+            let normal = between.normal();
+            p1.vel = p1.vel.add(normal.multiply(-force));
+            p2.vel = p2.vel.add(normal.multiply(force));
             other = other.next;
         }
         current = current.next;
     }
 }
 
-function moveParticles() {
+function moveParticles(deltaTime) {
     let current = particles.first;
     while(current) {
-        p = current.getValue();
-        
+        let p = current.getValue();
+        p.pos = p.pos.add(p.vel.multiply(deltaTime));
+        draw(p);
+        current = current.next;
     }
 }
 
@@ -227,13 +222,14 @@ function animate(timestamp) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     requestAnimationFrame(fpslimiter);
     ctx.beginPath();
+    ctx.fillStyle = "white";
     let deltaTime = getDeltaTime(timestamp);
     lastTimestamp = timestamp;
-    
-    draw();
-    
+    physics();
+    moveParticles(deltaTime);
+    ctx.fill();
     ctx.closePath();
-
+    console.log(particles.first.getValue().pos);
 }
 
 function fpslimiter(timestamp) {
