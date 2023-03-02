@@ -166,7 +166,8 @@ class Particle {
 }
 
 
-const fps = 60;
+const fpsTarget = 60;
+let fps = fpsTarget;
 let lastTimestamp = 0;
 const particles = new LinkedList();
 
@@ -211,6 +212,7 @@ function moveParticles(deltaTime) {
     }
 }
 
+
 function getDeltaTime(currentTimestamp){
     let frametime = currentTimestamp-lastTimestamp;
     console.log(frametime);
@@ -220,7 +222,7 @@ function getDeltaTime(currentTimestamp){
 // !!! multiply movement by deltatime 
 function animate(timestamp) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    requestAnimationFrame(fpslimiter);
+    requestAnimationFrame(animate);
     ctx.beginPath();
     ctx.fillStyle = "white";
     let deltaTime = getDeltaTime(timestamp);
@@ -232,12 +234,15 @@ function animate(timestamp) {
     console.log(particles.first.getValue().pos);
 }
 
-function fpslimiter(timestamp) {
-    setTimeout(animate, 1000/fps, timestamp);
 
+function click(info) {
+    particles.append(new Particle(info.offsetX, info.offsetY, 10, 0, 0));
 }
+
+canvas.addEventListener("mousedown", click);
+
 generateParticles();
-requestAnimationFrame(fpslimiter);
+requestAnimationFrame(animate);
 
 
 
