@@ -288,7 +288,6 @@ function collision(p1, p2) {
         }
         */
     }
-    //TODO: fix NaN (look at arythmetics)
     //wallcheck
     console.log(p1);
     if(p1.pos[0] + p1.r >= canvas.width ){

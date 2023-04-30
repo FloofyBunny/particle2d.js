@@ -1,0 +1,12 @@
+.navbar {
+    background-color: midnightblue;
+    box-shadow: black 0px 0px 15px;
+}
+
+canvas {
+    box-shadow: black 0px 0px 15px;
+    border: none;;
+    display: block;
+    margin: auto;
+    background-color: black;
+}
