@@ -158,12 +158,12 @@ canvas.height = 600;
 
 class Particle {
 
-    constructor(x = 0, y = 0, r = 10, xvel = 0, yvel = 0, name = ""){
+    constructor(x = 0, y = 0, r = 10, xvel = 0, yvel = 0, name = "", color="white"){
         this.pos = new Vector(x, y);
         this.r = r;
         this.vel = new Vector(xvel, yvel);
         this.name = name;
-
+        this.color = color;
     }
 
     getX() {
@@ -191,19 +191,19 @@ const particles = new LinkedList();
 const gravitation = 9.81;
 const maxVel = 5;
 
-function generateParticles(){
-    for(let i = 0; i < 9; i++) {
-        if(i === 8){
-            particles.append(new Particle(i*100, 100, 10, 0, 0, "last"))
-        } else {
-            particles.append(new Particle(i*100, 100, 10, 0, 0));
-        }
-        
-    }
+let spawnColor = 0;
 
+function generateParticles(){
+    for(let i = 0; i < 9; i++){
+            particles.append(new Particle(i*100, 100, 10, 0, 0, "none", "hsl("+ spawnColor +",100%, 50%)"));
+            spawnColor += 10;
+    }
 }
 
-function draw(p) {
+function draw(p, color) {
+    ctx.closePath();
+    ctx.beginPath();
+    ctx.fillStyle = color;
     ctx.moveTo(p.getX(), p.getY());
     ctx.arc(p.getX(), p.getY(), p.r, 0 , Math.PI * 2, false);
     ctx.fill();   
@@ -215,9 +215,6 @@ function physics() {
         const p1 = current.getValue();
         let other = current.next;
         while(other){
-            if(current === particles.last){
-                console.log("last")
-            }
             const p2 = other.getValue();
             gravity(p1, p2);
             collision(p1, p2);
@@ -225,11 +222,6 @@ function physics() {
         }
         collision(particles.last.getValue(), null);
         
-        
-        
-        if(current.next === particles.last){
-            console.log("");
-        }
         current = current.next;
     }
 }
@@ -293,7 +285,6 @@ function collision(p1, p2) {
     }
     */
     //wallcheck
-    console.log(p1);
     if(p1.pos[0] + p1.r >= canvas.width ){
         p1.pos[0] = canvas.width - p1.r;
         p1.vel[0] = -Math.abs(p1.vel[0]);
@@ -335,19 +326,20 @@ function gravity(p1, p2) {
         p2.vel = p2.vel.normal().multiply(maxVel);
     }
 }
+
+
 //TODO: Make every Particle colorizable
 function moveParticles(deltaTime) {
     let current = particles.first;
     while(current) {
         let p = current.getValue();
         p.pos = p.pos.add(p.vel.multiply(deltaTime));
-        ctx.fillStyle = "white";
+        let color = p.color;
         if(current === particles.last){
-            ctx.closePath();
-            ctx.beginPath();
+            color= "red";
             ctx.fillStyle = "red";
         }
-        draw(p);
+        draw(p, color);
         current = current.next;
     }
 }
@@ -357,12 +349,7 @@ function moveParticles() {
     while(current) {
         let p = current.getValue();
         p.pos = p.pos.add(p.vel);
-        ctx.fillStyle = "white";
-        if(current === particles.last){
-            ctx.closePath();
-            ctx.beginPath();
-            ctx.fillStyle = "red";
-        }
+        ctx.fillStyle = p.color;
         draw(p);
         current = current.next;
     }
@@ -387,12 +374,11 @@ function animate(timestamp) {
     moveParticles();
     //ctx.fill();
     ctx.closePath();
-    console.log(particles.first.getValue().pos);
 }
 
-
 function click(info) {
-    particles.append(new Particle(info.offsetX, info.offsetY, 10, 0, 0));
+    particles.append(new Particle(info.offsetX, info.offsetY, 10, 0, 0, "none","hsl(" + spawnColor + ",100%,50%)"));
+    spawnColor += 10;
 }
 
 canvas.addEventListener("mousedown", click);
