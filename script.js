@@ -188,7 +188,8 @@ const fpsTarget = 60;
 let fps = fpsTarget;
 let lastTimestamp = 0;
 const particles = new LinkedList();
-const gravitation = 100;
+const gravitation = 9.81;
+const maxVel = 5;
 
 function generateParticles(){
     for(let i = 0; i < 9; i++) {
@@ -270,8 +271,10 @@ function closestPointOnLine(l1, l2, point) {
 
 //TODO: variable mass
 function collision(p1, p2) {
+    
     let between;
     let normal;
+    /*
     if(p2 !== null){
         between = p2.pos.subtract(p1.pos);
         normal = between.normal();
@@ -281,13 +284,14 @@ function collision(p1, p2) {
             p1.vel = p1.vel.subtract(normal.multiply(p).multiply(1));
             p2.vel = p2.vel.add(normal.multiply(p).multiply(1));
         }
-        /* TODO: Stationary to Moving colision
+         TODO: Stationary to Moving colision
         if(checkCollision(p1, p2)){
             let midpoint = p1.pos.add(p2.pos).devide(2);
             p1.pos = midpoint.subtract(normal.multiply(p1.r))
         }
-        */
+        
     }
+    */
     //wallcheck
     console.log(p1);
     if(p1.pos[0] + p1.r >= canvas.width ){
@@ -313,18 +317,23 @@ function collision(p1, p2) {
 }
 
 function gravity(p1, p2) {
-            let between = p1.pos.subtract(p2.pos);
-            let distance = between.abs();
-            let force = gravitation * (1 / (distance**2));
-            let normal = between.normal();
-            if(p1.vel.abs() < 30){
-                p1.vel = p1.vel.add(normal.multiply(-force));
-                p2.vel = p2.vel.add(normal.multiply(force));
-            } else {
-                p1.vel = p1.vel.normal().multiply(100);
-            }
+    if(p2 == null){
+        return;
+    }
+    let between = p1.pos.subtract(p2.pos);
+    let distance = between.abs();
+    let force = gravitation * (1 / (distance**2));
+    let normal = between.normal();
+    if(p1.vel.abs() <= maxVel){
+        p1.vel = p1.vel.add(normal.multiply(-force));
+        p2.vel = p2.vel.add(normal.multiply(force));
+    } else {
+        p1.vel = p1.vel.normal().multiply(maxVel);
+    }
 
-
+    if(p2.vel.abs() > maxVel){
+        p2.vel = p2.vel.normal().multiply(maxVel);
+    }
 }
 //TODO: Make every Particle colorizable
 function moveParticles(deltaTime) {
@@ -332,6 +341,22 @@ function moveParticles(deltaTime) {
     while(current) {
         let p = current.getValue();
         p.pos = p.pos.add(p.vel.multiply(deltaTime));
+        ctx.fillStyle = "white";
+        if(current === particles.last){
+            ctx.closePath();
+            ctx.beginPath();
+            ctx.fillStyle = "red";
+        }
+        draw(p);
+        current = current.next;
+    }
+}
+
+function moveParticles() {
+    let current = particles.first;
+    while(current) {
+        let p = current.getValue();
+        p.pos = p.pos.add(p.vel);
         ctx.fillStyle = "white";
         if(current === particles.last){
             ctx.closePath();
@@ -359,7 +384,7 @@ function animate(timestamp) {
     let deltaTime = getDeltaTime(timestamp);
     lastTimestamp = timestamp;
     physics();
-    moveParticles(deltaTime);
+    moveParticles();
     //ctx.fill();
     ctx.closePath();
     console.log(particles.first.getValue().pos);
