@@ -152,9 +152,8 @@ li.remove(1);
 
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
-canvas.height = canvas.width;
-canvas.width = 800;
-canvas.height = 600;
+canvas.height = window.innerHeight - 150;
+canvas.width = window.innerWidth;
 
 class Particle {
 
@@ -164,6 +163,7 @@ class Particle {
         this.vel = new Vector(xvel, yvel);
         this.name = name;
         this.color = color;
+        spawnColor += 10;
     }
 
     getX() {
@@ -187,17 +187,15 @@ class Particle {
 const fpsTarget = 60;
 let fps = fpsTarget;
 let lastTimestamp = 0;
-const particles = new LinkedList();
-const gravitation = 9.81;
-const maxVel = 5;
+let particles = new LinkedList();
+let gravitation = 9.81;
+let maxVel = 5;
 
 let spawnColor = 0;
 
 function generateParticles(){
-    for(let i = 0; i < 9; i++){
-            particles.append(new Particle(i*100, 100, 10, 0, 0, "none", "hsl("+ spawnColor +",100%, 50%)"));
-            spawnColor += 10;
-    }
+    particles.append(new Particle(canvas.width/2-50, canvas.height/2, 10, 0, .15, "none", "hsl("+ spawnColor +",100%, 50%)"));
+    particles.append(new Particle(canvas.width/2+50, canvas.height/2, 10, 0, -.15, "none", "hsl("+ spawnColor +",100%, 50%)"));
 }
 
 function draw(p, color) {
@@ -374,11 +372,15 @@ function animate(timestamp) {
     moveParticles();
     //ctx.fill();
     ctx.closePath();
+
+    gravitation = document.getElementById("gravitation").value;
+    maxVel = document.getElementById("max-vel").value;
 }
 
 function click(info) {
     particles.append(new Particle(info.offsetX, info.offsetY, 10, 0, 0, "none","hsl(" + spawnColor + ",100%,50%)"));
     spawnColor += 10;
+    document.getElementById("particle-count").innerHTML = particles.size;
 }
 
 canvas.addEventListener("mousedown", click);

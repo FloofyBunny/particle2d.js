@@ -10,3 +10,12 @@ canvas {
     margin: auto;
     background-color: black;
 }
+
+body {
+    background-color: rgb(20,20,25);
+    color: white;
+}
+
+.navbar-brand {
+    text-shadow: 2px 2px 5px black;
+}

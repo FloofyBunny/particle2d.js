@@ -15,7 +15,9 @@
 <body>
     <nav class="navbar navbar-expand-sm navbar-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Partikel Simulation</a>
+          <a class="navbar-brand" href="#">
+            <span style="color:#FF0000">P</span><span style="color:#FF5500">a</span><span style="color:#FFAA00">r</span><span style="color:#FFFF00">t</span><span style="color:#AAFF00">i</span><span style="color:#55FF00">k</span><span style="color:#00FF00">e</span><span style="color:#00FF55">l</span> <span style="color:#00FFAA">S</span><span style="color:#00FFFF">i</span><span style="color:#00AAFF">m</span><span style="color:#0055FF">u</span><span style="color:#0000FF">l</span><span style="color:#5500FF">a</span><span style="color:#AA00FF">t</span><span style="color:#FF00FF">i</span><span style="color:#FF00AA">o</span><span style="color:#FF0055">n</span>
+          </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -23,10 +25,34 @@
           </div>
         </div>
       </nav>
-    <canvas id="myCanvas" width="900px" height="10px" class="mt-3">
+    <canvas id="myCanvas" width="900px" height="10px" class="">
     </canvas>
     <div class="container">
-        <h1 class="text-center">Klicke auf das Fenster!</h1>
+        <h1 class="text-center">Klicke auf das Fenster um Partikel zu erstellen!</h1>
+        <div class="d-flex justify-content-center">
+          <div class="m-2">
+            Partikel Anzahl:
+          </div>
+          <div id="particle-count" class="m-2">
+            2
+          </div>
+        </div>
+        <div class="d-flex justify-content-center">
+          <div class="m-2">
+            Gravitationskraft:
+          </div>
+          <div class="m-2">
+            <input type="number" id="gravitation" value="9.81">
+          </div>
+        </div>
+        <div class="d-flex justify-content-center">
+          <div class="m-2">
+            Maximale Geschwindigkeit:
+          </div>
+          <div class="m-2">
+            <input type="number" id="max-vel" value="5">
+          </div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
