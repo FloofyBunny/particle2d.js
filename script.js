@@ -149,10 +149,10 @@ li.prepend(0);
 li.prepend(1);
 li.remove(1);
 
-
+const marginBottom = 175
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
-canvas.height = window.innerHeight - 150;
+canvas.height = window.innerHeight - marginBottom;
 canvas.width = window.innerWidth;
 
 class Particle {
@@ -382,8 +382,8 @@ function animate(timestamp) {
     if(innerWidth != canvas.width){
         canvas.width = innerWidth;
     }
-    if(innerHeight-150 != canvas.height){
-        canvas.height = innerHeight-150;
+    if(innerHeight-marginBottom != canvas.height){
+        canvas.height = innerHeight-marginBottom;
     }
 }
 
@@ -424,8 +424,8 @@ function scenario2(){
     document.getElementById("gravitation").value = 1000;
     document.getElementById("max-vel").value = 10;
 
-    for(let i = 0; i < 10; i++){
-        for(let j = 0; j < 10; j++){
+    for(let i = 0; i < 9; i++){
+        for(let j = 0; j < 9; j++){
             particles.append(new Particle(canvas.width/2 + i,canvas.height/2+j, 10, 0, 0,"", "hsl(" + spawnColor + ",100%,50%)"));
             spawnColor+= 10;
             counter.innerHTML = particles.size;
@@ -443,8 +443,8 @@ function scenario3(){
     document.getElementById("gravitation").value = 100000;
     document.getElementById("max-vel").value = 75;
 
-    for(let i = 0; i < 10; i++){
-        for(let j = 0; j < 10; j++){
+    for(let i = 0; i < 9; i++){
+        for(let j = 0; j < 9; j++){
             particles.append(new Particle(canvas.width/2 + i,canvas.height/2+j, 10, 0, 0,"", "hsl(" + spawnColor + ",100%,50%)"));
             spawnColor+= 10;
             counter.innerHTML = particles.size;
