@@ -395,6 +395,63 @@ function click(info) {
 
 canvas.addEventListener("mousedown", click);
 
+function scenario1(){
+    particles.first = null;
+    particles.last = null;
+    particles.size = 0;
+    let counter = document.getElementById("particle-count")
+    counter.innerHTML =  particles.size;
+
+    document.getElementById("gravitation").value = -10000;
+    document.getElementById("max-vel").value = 10;
+
+    for(let i = 0; i < 10; i++){
+        for(let j = 0; j < 10; j++){
+            particles.append(new Particle(canvas.width/2 + i,canvas.height/2+j, 10, 0, 0,"", "hsl(" + spawnColor + ",100%,50%)"));
+            spawnColor+= 10;
+            counter.innerHTML = particles.size;
+        }
+    }
+}
+
+function scenario2(){
+    particles.first = null;
+    particles.last = null;
+    particles.size = 0;
+    let counter = document.getElementById("particle-count")
+    counter.innerHTML =  particles.size;
+
+    document.getElementById("gravitation").value = 1000;
+    document.getElementById("max-vel").value = 10;
+
+    for(let i = 0; i < 10; i++){
+        for(let j = 0; j < 10; j++){
+            particles.append(new Particle(canvas.width/2 + i,canvas.height/2+j, 10, 0, 0,"", "hsl(" + spawnColor + ",100%,50%)"));
+            spawnColor+= 10;
+            counter.innerHTML = particles.size;
+        }
+    }
+}
+
+function scenario3(){
+    particles.first = null;
+    particles.last = null;
+    particles.size = 0;
+    let counter = document.getElementById("particle-count")
+    counter.innerHTML =  particles.size;
+
+    document.getElementById("gravitation").value = 100000;
+    document.getElementById("max-vel").value = 75;
+
+    for(let i = 0; i < 10; i++){
+        for(let j = 0; j < 10; j++){
+            particles.append(new Particle(canvas.width/2 + i,canvas.height/2+j, 10, 0, 0,"", "hsl(" + spawnColor + ",100%,50%)"));
+            spawnColor+= 10;
+            counter.innerHTML = particles.size;
+        }
+    }
+}
+
 generateParticles();
 requestAnimationFrame(animate);
 
