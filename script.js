@@ -313,6 +313,9 @@ function gravity(p1, p2) {
     let distance = between.abs();
     let force = gravitation * (1 / (distance**2));
     let normal = between.normal();
+    if(isNaN(force)){
+        return;
+    }
     if(p1.vel.abs() <= maxVel){
         p1.vel = p1.vel.add(normal.multiply(-force));
         p2.vel = p2.vel.add(normal.multiply(force));
@@ -375,6 +378,13 @@ function animate(timestamp) {
 
     gravitation = document.getElementById("gravitation").value;
     maxVel = document.getElementById("max-vel").value;
+
+    if(innerWidth != canvas.width){
+        canvas.width = innerWidth;
+    }
+    if(innerHeight-150 != canvas.height){
+        canvas.height = innerHeight-150;
+    }
 }
 
 function click(info) {
