@@ -152,8 +152,8 @@ li.remove(1);
 const marginBottom = 175
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
-canvas.height = window.innerHeight - marginBottom;
-canvas.width = window.innerWidth;
+canvas.height = document.querySelector("html").clientHeight - marginBottom;
+canvas.width = document.querySelector("html").clientWidth;
 
 class Particle {
 
